@@ -1,0 +1,12 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vibe</title>
+<meta name="robots" content="noindex">
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;font:16px system-ui,sans-serif;text-align:center;padding:24px}a{color:#B14CFF}</style></head>
+<body><div id="m">Giriş yapılıyor…</div><script>
+/* Google ile giriş dönüş sayfası: Google belgeyi adresin # kısmında verir, bu sayfa Vibe sunucusuna iletir. */
+(async()=>{const h=new URLSearchParams(location.hash.slice(1));const m=document.getElementById("m");
+history.replaceState(null,"",location.pathname);
+if(!h.get("id_token")){m.textContent="Giriş iptal edildi. Uygulamaya geri dönebilirsin.";return}
+try{const r=await fetch("https://medya.adalyadijital.com/auth/google/finish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id_token:h.get("id_token"),state:h.get("state")})});
+const j=await r.json();if(j.redirect){location.replace(j.redirect);m.innerHTML='Uygulamaya dönülüyor…<br><br><a href="'+j.redirect.replace(/"/g,"")+'">Vibe\'ı aç</a>'}else m.textContent=(j.error&&j.error.message)||"Giriş yapılamadı."}
+catch(e){m.textContent="Giriş yapılamadı: "+e.message}})();
+</script></body></html>
